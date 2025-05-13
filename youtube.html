@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <!-- <script src="./jquery-3.7.1.min.js"></script> -->
+  </head>
+  <body>
+    <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
+    <!-- 1. ここの<div>タグがYoutubeの<iframe>に置き換わる。 -->
+
+    <!-- 動画が表示されている<div>の下に追加 -->
+    <div id="player"></div>
+    <form>
+      <input type="search" id="ytSearch" placeholder="テキストを入力" />
+      <button id="searchBtn">検索</button>
+    </form>
+
+    <select class="searchlist">
+      <option value="" id="firstAnnounce">検索してください</option>
+    </select>
+    <nav>
+      <ul>
+        <li id="doplay">再生</li>
+        <li id="dostop">停止</li>
+        <li id="dopause">一時停止</li>
+        <li id="mute">ミュート</li>
+        <li id="do10sNext">10秒先へ</li>
+        <li id="do10sPrev">10秒戻る</li>
+        <br />
+        <label
+          >ボリューム<input
+            type="range"
+            min="0"
+            max="100"
+            name="volume"
+            id="volume"
+            value="50"
+          />
+          <span id="volumeNum"></span>
+        </label>
+      </ul>
+    </nav>
+
+    <script>
+      // 2. This code loads the IFrame Player API code asynchronously.
+      // 2. 変数tagにscriptタグを作って入れる。Element=要素、Attrubute=属性
+      var tag = document.createElement("script");
+
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName("script")[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      // 3. APIのコードを読み込んでから、この関数を<iframe>内に影響させる。
+      var player;
+      function onPlayerPlaybackQualityChange(event) {
+        document.getElementById("result").innerHTML =
+          "再生画質の変更に成功しました（onPlaybackQualityChangeイベントが発生しました）";
+        document.getElementById("current").innerHTML = event.data;
+      }
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player("player", {
+          height: "360",
+          width: "640",
+          videoId: "2Jqt1BQ_nZM",
+          playerVars: {
+            playsinline: 1,
+            controls: 1,
+            rel: 0,
+            loop: 1,
+            showinfo: 0,
+            loop: 1,
+            // コントローラーを非表示
+          },
+          events: {
+            onReady: onPlayerReady, //エラーで効かない。
+            // onStateChange: onPlayerStateChange,
+            onPlaybackQualityChange: onPlayerPlaybackQualityChange,
+          },
+        });
+      }
+
+      // 4. The API will call this function when the video player is ready.
+      // 4. このAPIは、video playderが準備でしたら、この関数を呼び出します。
+      // function onPlayerReady(event) {
+      //   event.target.playVideo();
+      // }
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for six seconds and then stop.
+      /* 5. video playerのステート（状態）が変更されたら、この関数を呼び出す。
+          動画を再生するときの設定は、state=1にしておきます。
+          プレイヤーは、6000ミリ秒後に終了します。 */
+      var done = false;
+      function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING && !done) {
+          setTimeout(stopVideo, 6000);
+          done = true;
+        }
+      }
+      //停止関数
+      function stopVideo() {
+        player.stopVideo();
+      }
+      //再生関数
+      function playTheVideo() {
+        player.playVideo();
+      }
+
+      //再生イベント
+      let doplayBtn = document.querySelector("#doplay");
+      doplayBtn.addEventListener("click", function () {
+        playTheVideo(); //関数名に変更
+      });
+
+      //停止イベント
+      let dostopBtn = document.querySelector("#dostop");
+      dostopBtn.addEventListener("click", function () {
+        stopVideo();
+      });
+
+      //一時停止関数
+      function pauseTheVideo() {
+        player.pauseVideo();
+      }
+
+      //一時停止イベント
+      let dopauseBtn = document.querySelector("#dopause");
+      dopauseBtn.addEventListener("click", function () {
+        pauseTheVideo();
+      });
+
+      //ミュート関数
+      function onMute() {
+        //ミュートの時、trueを返すのでミュートを解除します。
+        if (player.isMuted()) {
+          player.unMute();
+        } else {
+          //ミュートが解除されている時はfalseなので、ミュートにします。
+          player.mute();
+        }
+      }
+
+      //ミュートイベント
+      let onMuteBtn = document.querySelector("#mute");
+      onMuteBtn.addEventListener("click", function () {
+        onMute();
+        if (onMuteBtn.innerText === "ミュート") {
+          onMuteBtn.innerText = "ミュート解除";
+        } else {
+          onMuteBtn.innerText = "ミュート";
+        }
+      });
+
+      //10秒前にの関数
+      function onePrev() {
+        let currentTime = player.getCurrentTime();
+        player.seekTo(currentTime - 10);
+      }
+
+      //10秒後にの関数
+      function oneNext() {
+        let currentTime = player.getCurrentTime();
+        player.seekTo(currentTime + 10);
+      }
+
+      //10秒前へイベント
+      let onePrevBtn = document.querySelector("#do10sPrev");
+      onePrevBtn.addEventListener("click", function () {
+        onePrev();
+      });
+
+      //10秒後へイベント
+      let oneNextBtn = document.querySelector("#do10sNext");
+      oneNextBtn.addEventListener("click", function () {
+        oneNext();
+      });
+
+      //ボリューム関数
+      function volumeFn(vol) {
+        let currentVol = player.getVolume();
+        player.setVolume(vol);
+      }
+
+      //ボリュームイベント
+      let volumeBtn = document.querySelector("#volume");
+      let volumeTxt = document.querySelector("#volumeNum");
+      volumeBtn.addEventListener("change", function () {
+        volumeFn(this.value);
+        volumeTxt.textContent = this.value;
+      });
+
+      // 4. The API will call this function when the video player is ready.
+      // 4. このAPIは、video playderが準備でしたら、この関数を呼び出します。
+      function onPlayerReady(event) {
+        // 初期音量設定
+        const currentVol = 5;
+        event.target.setVolume(currentVol);
+        document.querySelector("#volume").value = currentVol;
+        document.querySelector("#volumeNum").textContent = currentVol;
+
+        // 前回の再生時間をlocalStorageから取得して復元
+        const savedTime = parseFloat(localStorage.getItem("lastPlayedTime"));
+        const savedVideoId = localStorage.getItem("lastPlayedVideoId");
+
+        if (
+          savedVideoId === player.getVideoData().video_id &&
+          !isNaN(savedTime)
+        ) {
+          player.seekTo(savedTime);
+        }
+
+        // 再生時間を5秒ごとに保存
+        setInterval(() => {
+          if (player && player.getPlayerState() === YT.PlayerState.PLAYING) {
+            const currentTime = player.getCurrentTime();
+            localStorage.setItem("lastPlayedTime", currentTime);
+            localStorage.setItem(
+              "lastPlayedVideoId",
+              player.getVideoData().video_id
+            );
+          }
+        }, 5000);
+
+        // 自動再生
+        event.target.playVideo();
+      }
+
+      // 授業資料からの引用
+      const selectvideo = document.querySelector(".searchlist");
+      function ytSearch(val) {
+        const key = "AIzaSyAlacGXiu5caP5p19dY_9NC9JB4m2ulwTI"; //自分のキーに書き換えます。
+        const num = 10;
+        const part = "snippet";
+        const type = "video";
+        const query = val;
+        fetch(
+          `https://www.googleapis.com/youtube/v3/search?type=${type}&part=${part}&maxResults=${num}&key=${key}&q=${query}&playsinline=1`
+        )
+          .then((data) => data.json())
+          .then((obj) => {
+            // console.log(obj);
+            for (let movie of obj["items"]) {
+              // console.log(movie["snippet"]["title"]);
+              const ytTitle = movie["snippet"]["title"];
+              const ytId = movie["id"]["videoId"];
+              // const headLink = "https://www.youtube.com/watch?v=";
+
+              // optionタグの作成
+              // const links = document.createElement("a");
+              // links.setAttribute("src", headLink + ytId);
+              // links.textContent = ytTitle;
+              // console.log(headLink + ytId);
+              const optionTag = document.createElement("option");
+              optionTag.innerHTML = ytTitle;
+              optionTag.setAttribute("value", ytId);
+              console.log(optionTag.value);
+              // optionTag.appendChild(links);
+              // console.log(links);
+              // optionTag.setAttribute("value", ytId);
+              selectvideo.appendChild(optionTag);
+            }
+          });
+      }
+
+      selectvideo.addEventListener("change", (event) => {
+        const videoId = event.target.value;
+        console.log(videoId);
+        if (videoId) {
+          // window.location.href = url;
+          // onYouTubeIframeAPIReady(url);
+          player.loadVideoById(videoId);
+        }
+      });
+
+      // document.body.addEventListener("click", function () {
+      //   ytSearch("HIKAKIN");
+      // });
+
+      const ytSearchBtn = document.querySelector("#searchBtn");
+      ytSearchBtn.addEventListener("click", function (e) {
+        const ytSearchVal = document.querySelector("#ytSearch").value;
+        const firstAnnounce = document.querySelector("#firstAnnounce");
+        console.log(ytSearchVal); //検索フォームの値を取得
+        ytSearch(ytSearchVal);
+
+        selectvideo.innerHTML =
+          '<option value="" id="firstAnnounce">選択して動画を視聴</option>';
+        e.preventDefault(); //検索ボタンの送信をストップしておく。
+      });
+
+      // 動画IDが変更された際にローカルストレージに保存
+      selectvideo.addEventListener("change", function (event) {
+        const videoId = event.target.value;
+        if (videoId) {
+          localStorage.setItem("videoId", videoId); // 動画IDを保存
+          player.loadVideoById(videoId);
+        }
+      });
+
+      // ページ読み込み時に動画IDを選択
+      window.addEventListener("load", function () {
+        const savedVideoId = localStorage.getItem("videoId");
+        if (savedVideoId) {
+          selectvideo.value = savedVideoId; // 保存されている動画IDを選択する
+          player.loadVideoById(savedVideoId); // 動画を読み込む
+        }
+      });
+    </script>
+  </body>
+</html>

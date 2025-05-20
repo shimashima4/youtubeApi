@@ -98,8 +98,17 @@
           events: {
             onReady: onPlayerReady,
             onPlaybackQualityChange: onPlayerPlaybackQualityChange,
+            onStateChange: onPlayerStateChange,
           },
         });
+      }
+
+      // ループを確実にする処理
+      function onPlayerStateChange(event) {
+        if (event.data === YT.PlayerState.ENDED) {
+          player.seekTo(0);
+          player.playVideo();
+        }
       }
 
       function onPlayerReady(event) {

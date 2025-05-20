@@ -78,10 +78,12 @@ nav ul {
 nav ul li {
   cursor: pointer;
   transition: all 0.3s ease;
+  font-weight: lighter;
 }
 nav ul li:hover {
   color: rgb(43, 90, 155);
   transition: all 0.3s ease;
+  font-weight: bold;
 }
 
 label {

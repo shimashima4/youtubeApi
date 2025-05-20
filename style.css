@@ -19,15 +19,6 @@ h1 {
   color: rgb(148, 75, 23);
 }
 
-li {
-  transition: all 0.3s ease;
-
-  &:hover {
-    color: rgb(43, 90, 155);
-    transition: all 0.3s ease;
-  }
-}
-
 .buttons {
   display: flex;
   align-items: center;
@@ -87,6 +78,12 @@ nav ul {
   padding: 10px 30px;
   & li {
     cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: rgb(43, 90, 155);
+      transition: all 0.3s ease;
+    }
   }
 }
 label {

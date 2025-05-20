@@ -1,0 +1,101 @@
+@charset 'utf-8';
+
+body {
+  background-color: rgb(170, 197, 162);
+}
+
+.body {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 30px;
+  background-color: rgb(170, 197, 162);
+}
+
+h1 {
+  padding-left: 30px;
+  padding-top: 30px;
+  font-size: 23px;
+  color: rgb(148, 75, 23);
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  margin-top: 3px;
+  padding: 10px 30px;
+  background-color: rgb(249, 236, 208);
+  border-left: 10px solid rgb(200, 42, 42);
+}
+
+.playArea {
+  max-width: 60%;
+  width: 60%;
+}
+
+#reset {
+  transition: all 0.3s ease;
+  font-size: 14px;
+  letter-spacing: 0em;
+  margin-left: 45px;
+  padding: 10px;
+  cursor: pointer;
+  color: rgb(200, 42, 42);
+  &:hover {
+    transition: all 0.3s ease;
+    background-color: rgb(185, 210, 192);
+    border-radius: 5px;
+    letter-spacing: 0.05em;
+  }
+}
+
+#ytSearch {
+  width: 60%;
+  background-color: rgb(133, 159, 125);
+  border-radius: 5px;
+  padding: 8px;
+  margin-top: 11px;
+}
+
+#searchBtn {
+  padding: 8px 18px;
+  margin-left: 15px;
+  background-color: rgb(200, 74, 74);
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#player {
+  border: 5px solid rgb(120, 98, 67);
+  border-radius: 5px;
+  width: 100%;
+}
+
+nav ul {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 30px;
+  & li {
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: rgb(43, 90, 155);
+      transition: all 0.3s ease;
+    }
+  }
+}
+label {
+  padding-left: 30px;
+}
+
+input[type="range"] {
+  background-color: rgb(249, 236, 208);
+  border-radius: 6px;
+  width: 28%;
+}
+
+#kanren {
+  width: 35%;
+}

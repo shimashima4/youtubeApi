@@ -1,7 +1,7 @@
 @charset 'utf-8';
 
 body {
-  background: url("./texture.jpg") no-repeat center center / cover;
+  // background: url("./texture.jpg") no-repeat center center / cover;
   background-color: rgb(170, 197, 162);
 }
 
@@ -10,7 +10,6 @@ body {
   flex-wrap: wrap;
   justify-content: space-between;
   padding: 30px;
-  // background-color: rgb(170, 197, 162);
 }
 
 h1 {

@@ -1,5 +1,3 @@
-@charset 'utf-8';
-
 body {
   background-color: rgb(170, 197, 162);
 }
@@ -41,12 +39,12 @@ h1 {
   padding: 10px;
   cursor: pointer;
   color: rgb(200, 42, 42);
-  &:hover {
-    transition: all 0.3s ease;
-    background-color: rgb(185, 210, 192);
-    border-radius: 5px;
-    letter-spacing: 0.05em;
-  }
+}
+#reset:hover {
+  transition: all 0.3s ease;
+  background-color: rgb(185, 210, 192);
+  border-radius: 5px;
+  letter-spacing: 0.05em;
 }
 
 #ytSearch {
@@ -76,21 +74,21 @@ nav ul {
   display: flex;
   justify-content: space-between;
   padding: 10px 30px;
-  & li {
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:hover {
-      color: rgb(43, 90, 155);
-      transition: all 0.3s ease;
-    }
-  }
 }
+nav ul li {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+nav ul li:hover {
+  color: rgb(43, 90, 155);
+  transition: all 0.3s ease;
+}
+
 label {
   padding-left: 30px;
 }
 
-input[type="range"] {
+input[type=range] {
   background-color: rgb(249, 236, 208);
   border-radius: 6px;
   width: 28%;
@@ -99,3 +97,4 @@ input[type="range"] {
 #kanren {
   width: 35%;
 }
+/*# sourceMappingURL=style.css.map */
